@@ -1,15 +1,27 @@
 package co.edu.platzi;
 
+import co.edu.platzi.connection.ConnectionDB;
+import co.edu.platzi.service.MessageService;
+
 import java.sql.Connection;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Conexion conexion = new Conexion();
+        Scanner sc = new Scanner(System.in);
+        ConnectionDB connectionDB = new ConnectionDB();
+        int response = 0;
 
-        try (Connection connection = conexion.get_connection()) {
+        do {
+            System.out.print("\n==> Messaging Application <==\n 1. Crear mensaje\n 2. Listar mensajes\n 3. Editar mensaje\n 4. Eliminar mensaje\n 5. Salir\n -> ");
+            response = sc.nextInt();
 
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+            switch (response) {
+                case 1 -> MessageService.createMessage();
+                case 2 -> MessageService.getAllMessages();
+                case 3 -> MessageService.updateMessage();
+                case 4 -> MessageService.deleteMessage();
+            }
+        } while (response != 5);
     }
 }
