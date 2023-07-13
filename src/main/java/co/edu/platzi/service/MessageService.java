@@ -21,14 +21,26 @@ public class MessageService {
     }
 
     public static void getAllMessages() {
-
+        MessageDAO.getMessages();
     }
 
     public static void deleteMessage() {
-
+        System.out.print("Ingrese Id del mensaje\n -> ");
+        int id = scanner.nextInt();
+        message.setId(id);
+        MessageDAO.deleteMessage(message);
     }
 
     public static void updateMessage() {
-
+        System.out.print("Actualice el mensaje\n -> ");
+        String text = scanner.next();
+        System.out.print("Actualice el autor\n -> ");
+        String author = scanner.next();
+        System.out.print("Ingrese Id del mensaje\n -> ");
+        int id = scanner.nextInt();
+        message.setMessage(text);
+        message.setAuthor(author);
+        message.setId(id);
+        MessageDAO.updateMessage(message);
     }
 }

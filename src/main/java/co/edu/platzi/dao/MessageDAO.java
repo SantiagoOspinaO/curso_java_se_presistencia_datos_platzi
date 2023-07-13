@@ -5,6 +5,7 @@ import co.edu.platzi.model.Message;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class MessageDAO {
 
@@ -20,19 +21,58 @@ public class MessageDAO {
             statement.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("¡ERROR! " + e);
         }
     }
 
     public static void getMessages() {
+        try (Connection db = connectionDB.getConnection()) {
+            PreparedStatement statement = null;
+            ResultSet resultSet = null;
+            //String query = "select m.id_mensaje,m.mensaje,m.fecha,u.nombre_completo from mensajes m join usuarios u on m.id_usuario=u.id_usuario";
+            String query = "select * from mensajes";
+            statement = db.prepareStatement(query);
+            resultSet = statement.executeQuery();
 
+            while (resultSet.next()) {
+                System.out.print("[Id: " + resultSet.getInt("id_mensaje")
+                        + " | mensaje: " + resultSet.getString("mensaje")
+                        + " | autor: " + resultSet.getString("autor_mensaje")
+                        + " | fecha: " + resultSet.getString("fecha_mensaje") + "]\n");
+            }
+
+        } catch (Exception e) {
+            System.out.println("¡ERROR! " + e);
+        }
     }
 
-    public static void deleteMessage(int id) {
+    public static void deleteMessage(Message message) {
+        try (Connection db = connectionDB.getConnection()) {
+            PreparedStatement statement = null;
+            String query = "delete from mensajes where id_mensaje = ?";
+            statement = db.prepareStatement(query);
+            statement.setInt(1, message.getId());
+            statement.executeUpdate();
+            System.out.println("¡Se ha eliminado el mensaje con exito!");
 
+        } catch (Exception e) {
+            System.out.println("¡ERROR! " + e);
+        }
     }
 
     public static void updateMessage(Message message) {
+        try (Connection db = connectionDB.getConnection()) {
+            PreparedStatement statement = null;
+            String query = "update mensajes set mensaje = ?, autor_mensaje = ? where id_mensaje = ?";
+            statement = db.prepareStatement(query);
+            statement.setString(1, message.getMessage());
+            statement.setString(2, message.getAuthor());
+            statement.setInt(3, message.getId());
+            statement.executeUpdate();
+            System.out.println("¡Se ha actualizado el mensaje con exito!");
 
+        } catch (Exception e) {
+            System.out.println("¡ERROR! " + e);
+        }
     }
 }
