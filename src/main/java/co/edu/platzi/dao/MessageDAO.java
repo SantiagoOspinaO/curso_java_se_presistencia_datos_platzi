@@ -13,9 +13,8 @@ public class MessageDAO {
 
     public static void createMessage(Message message) {
         try (Connection db = connectionDB.getConnection()) {
-            PreparedStatement statement = null;
             String query = "insert into mensajes(mensaje,autor_mensaje,fecha_mensaje) values (?,?,CURRENT_TIMESTAMP)";
-            statement = db.prepareStatement(query);
+            PreparedStatement statement = db.prepareStatement(query);
             statement.setString(1, message.getMessage());
             statement.setString(2, message.getAuthor());
             statement.executeUpdate();
@@ -27,12 +26,10 @@ public class MessageDAO {
 
     public static void getMessages() {
         try (Connection db = connectionDB.getConnection()) {
-            PreparedStatement statement = null;
-            ResultSet resultSet = null;
             //String query = "select m.id_mensaje,m.mensaje,m.fecha,u.nombre_completo from mensajes m join usuarios u on m.id_usuario=u.id_usuario";
             String query = "select * from mensajes";
-            statement = db.prepareStatement(query);
-            resultSet = statement.executeQuery();
+            PreparedStatement statement = db.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 System.out.print("[Id: " + resultSet.getInt("id_mensaje")
@@ -46,12 +43,11 @@ public class MessageDAO {
         }
     }
 
-    public static void deleteMessage(Message message) {
+    public static void deleteMessage(int messageId) {
         try (Connection db = connectionDB.getConnection()) {
-            PreparedStatement statement = null;
             String query = "delete from mensajes where id_mensaje = ?";
-            statement = db.prepareStatement(query);
-            statement.setInt(1, message.getId());
+            PreparedStatement statement = db.prepareStatement(query);
+            statement.setInt(1, messageId);
             statement.executeUpdate();
             System.out.println("¡Se ha eliminado el mensaje con exito!");
 
@@ -62,9 +58,8 @@ public class MessageDAO {
 
     public static void updateMessage(Message message) {
         try (Connection db = connectionDB.getConnection()) {
-            PreparedStatement statement = null;
             String query = "update mensajes set mensaje = ?, autor_mensaje = ? where id_mensaje = ?";
-            statement = db.prepareStatement(query);
+            PreparedStatement statement = db.prepareStatement(query);
             statement.setString(1, message.getMessage());
             statement.setString(2, message.getAuthor());
             statement.setInt(3, message.getId());

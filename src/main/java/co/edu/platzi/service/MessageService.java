@@ -27,8 +27,7 @@ public class MessageService {
     public static void deleteMessage() {
         System.out.print("Ingrese Id del mensaje\n -> ");
         int id = scanner.nextInt();
-        message.setId(id);
-        MessageDAO.deleteMessage(message);
+        MessageDAO.deleteMessage(id);
     }
 
     public static void updateMessage() {
